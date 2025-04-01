@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Todo{% endblock %}
+
+{% block content %}
+    <h2>Create New Task</h2>
+    <form method="post" action="{% url 'create_todo' %}">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Enter title" required>
+        <textarea name="description" placeholder="Enter description" required></textarea>
+        <label>
+            <input type="checkbox" name="completed"> Completed
+        </label>
+        <button type="submit" class="btn btn-primary">Add Task</button>
+    </form>
+    <br>
+    <a href="{% url 'todo_list' %}" class="btn btn-secondary">Back to List</a>
+{% endblock %}

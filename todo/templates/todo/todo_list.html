@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Todo List{% endblock %}
+
+{% block content %}
+    <h1>Todo List</h1>
+    <div class="add-task-container">
+        <button id="addTaskBtn">+ Add</button>
+        <a href="?filter=important" class="filter-btn">Show Important Tasks</a>
+        <a href="{% url 'todo_list' %}" class="filter-btn filter-btn-all">Show All Tasks</a>
+    </div>
+
+    <div id="addTaskForm">
+        <h2>Create New Task</h2>
+        <form method="post" action="{% url 'create_todo' %}">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Enter title" required>
+            <textarea name="description" placeholder="Enter description" required></textarea>
+            <label>
+                <input type="checkbox" name="completed"> Completed
+            </label>
+            <button type="submit" class="btn btn-primary">Add Task</button>
+            <button type="button" id="cancelBtn">Cancel</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Last Modified</th>
+            <th>Completed</th>
+            <th>Important</th>
+            <th>Actions</th>
+        </tr>
+        {% for todo in todos %}
+        <tr>
+            <td>{{ todo.title }}</td>
+            <td>{{ todo.description }}</td>
+            <td>{{ todo.last_modified }}</td>
+            <td>{{ todo.completed }}</td>
+            <td>
+                <form method="post" action="{% url 'important_todo' todo.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="star-btn">
+                        {% if todo.important %}
+                            ⭐
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    </button>
+                </form>
+            </td>
+            <td>
+                <a href="{% url 'update_todo' todo.id %}"><button class="edit-btn">Edit</button></a>
+                <form method="post" action="{% url 'delete_todo' todo.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn" onclick="return confirm('Are you sure?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No todos available.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        document.getElementById("addTaskBtn").addEventListener("click", function() {
+            document.getElementById("addTaskForm").style.display = "block";
+            this.style.display = "none";
+        });
+        document.getElementById("cancelBtn").addEventListener("click", function() {
+            document.getElementById("addTaskForm").style.display = "none";
+            document.getElementById("addTaskBtn").style.display = "block";
+        });
+    </script>
+{% endblock %}
