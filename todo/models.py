@@ -8,5 +8,5 @@ class TodoModel(models.Model):
     completed = models.BooleanField(default=False) #status
     important = models.BooleanField(default=False) #important 
 
-    def __str__(self):
+    def __str__(self):# string representation of the object
         return self.title
