@@ -38,3 +38,9 @@ def important_todo(request, todo_id):
     todo.important = not todo.important
     todo.save()
     return redirect('todo_list')
+
+#def complete_todo(request, todo_id):
+ #   todo = TodoModel.objects.get(id=todo_id)
+  #  todo.completed = not todo.completed
+   # todo.save()
+    #return redirect('todo_list')
